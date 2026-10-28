@@ -67,6 +67,7 @@ These best-practice items are general checks (`general-checks.md`), reported onc
 | S28 | Live captions use closed captions | `startTranscription(`, `startClosedCaptions(`, `call.closed_caption` | Live captions come from `startClosedCaptions()`; `startTranscription()` is for the post-call transcript | Medium (`N/A` without captions) |
 | S29 | RTMP ingest keys last long enough | `ingress.rtmp`, `useCallIngress`, `generateUserToken(` used as a stream key | The user token used as an RTMP stream key is valid for the broadcast's length (the default token lifetime is 1 hour) | Medium (`N/A` without RTMP ingest) |
 | S30 | Target resolution fits the layouts | `target_resolution`, call-type settings, layout components | The call type's `settings.video.target_resolution` fits the layouts the app renders; Stream bills per participant minute by the aggregated resolution of the video each participant receives, so a grid of small tiles rarely needs the default type's high target. Link the pricing page; quote no prices | Low |
+| S31 | Noise cancellation considered where people speak | `NoiseCancellationProvider`, `useNoiseCancellation`, `NoiseCancellation` from `@stream-io/audio-filters-web`, `call.microphone.enableNoiseCancellation(` | `meeting` and `calling` surfaces where people speak offer Stream's noise cancellation (desktop browsers), or the report notes it as an option. A missing filter is `NEEDS-REVIEW`, never `FAIL`: it is a product choice, metered separately on the pricing page | Low (`N/A` for listen-only and livestream-viewer surfaces) |
 
 ## Fix list
 

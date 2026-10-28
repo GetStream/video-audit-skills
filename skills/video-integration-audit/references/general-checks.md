@@ -169,6 +169,18 @@ Run every check in every mode. In the "neither" mode (no supported video SDK fou
 | Vonage | callback URL handlers for archive, broadcast, render, captions and session monitoring (`statusCallbackUrl`); a signature or shared-secret check (verify against your Vonage account settings) |
 | Stream | webhook route; `client.verifyAndParseWebhook(rawBody, signature)` or `client.verifyWebhook(body, signature)` with the `x-signature` header, on the raw request body |
 
+### G13. Media state shown to the user follows the SDK - Medium
+
+**Why:** a microphone or camera can stop without the user clicking anything: a headset is unplugged, the OS takes the device, a moderator mutes the user. An app that shows its own on/off flag, flipped only by its own buttons, keeps showing "on" (or "Mute") while nobody hears the user, and the user cannot tell.
+
+**Pass:** the mute and camera indicators the user sees are driven by the SDK's device state or by the SDK's events for forced and device-side changes, not only by a local flag the app's own buttons toggle. `N/A` if the app shows no device state.
+
+| Vendor | Anchors |
+|---|---|
+| Agora | local track `track-ended` (device lost), `AgoraRTC.onMicrophoneChanged` / `onCameraChanged`; host mutes arrive as the app's own RTM messages, so the app must update its own state on them |
+| Vonage | Publisher `muteForced` (fired for both `forceMuteStream` and `forceMuteAll`; the Session's `muteForced` fires only for `forceMuteAll`), Publisher `mediaStopped`, `audioInputDeviceChanged`; `publisher.stream.hasAudio` / `hasVideo` |
+| Stream | `useMicrophoneState()` / `useCameraState()` (`isMute`, `status`), `call.microphone.state.status$` / `call.camera.state.status$`. The SDK sets the device status to `disabled` itself when its track ends (for example an unplugged headset) and when the user is muted, so an app that renders these passes; a separate local flag fails the same way as on any other platform |
+
 ## Reporting
 
 One row per check, in this order, in the report's "General findings" table (see `output-contract.md`). Never skip a row. Carry each `FAIL` and `NEEDS-REVIEW` into the prioritised fix list, Blockers first.

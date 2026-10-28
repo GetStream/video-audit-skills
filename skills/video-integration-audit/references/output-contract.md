@@ -22,18 +22,19 @@ The report has two readers. A person reads the prose and tables to decide what t
 | 1. Header | yes | yes | yes | yes |
 | 2. What was detected | yes | yes | yes | yes |
 | 3. Usage dossier | yes | short | yes | no |
-| 4. Integration inventory | yes | no | yes (remaining vendor code) | no |
-| 5. Behaviour changes to plan for | yes | no | yes | no |
-| 6. Stream best-practice findings | no | yes | yes (migrated part) | no |
-| 7. General findings | yes | yes | yes | yes |
-| 8. Call-type configuration checklist | yes | if gaps found | yes | no |
-| 9. Migration plan | yes | no | yes (finish the transition) | no |
-| 10. Flag for a human | yes | yes | yes | yes |
-| 11. Questions the code cannot answer | yes | yes | yes | if any |
-| 12. Prioritised fix list | yes | yes | yes | yes |
-| 13. What this skill cannot do | yes | yes | yes | yes |
-| 14. How to continue | yes | yes | yes | yes |
-| 15. Machine-readable block | yes | yes | yes | yes |
+| 4. What changes for this app on Stream | yes | no | yes (remaining vendor code) | no |
+| 5. Integration inventory | yes | no | yes (remaining vendor code) | no |
+| 6. Behaviour changes to plan for | yes | no | yes | no |
+| 7. Stream best-practice findings | no | yes | yes (migrated part) | no |
+| 8. General findings | yes | yes | yes | yes |
+| 9. Call-type configuration checklist | yes | if gaps found | yes | no |
+| 10. Migration plan | yes | no | yes (finish the transition) | no |
+| 11. Flag for a human | yes | yes | yes | yes |
+| 12. Questions the code cannot answer | yes | yes | yes | if any |
+| 13. Prioritised fix list | yes | yes | yes | yes |
+| 14. What this skill cannot do | yes | yes | yes | yes |
+| 15. How to continue | yes | yes | yes | yes |
+| 16. Machine-readable block | yes | yes | yes | yes |
 
 A section marked `no` keeps its heading with the single line `Not applicable in <mode> mode.`, so section numbers are the same in every report. In Stream mode the report contains no migration plan and no comparison with other vendors.
 
@@ -52,7 +53,7 @@ A section marked `no` keeps its heading with the single line `Not applicable in 
 - Publisher: this skill is published by Stream (getstream.io), a video platform vendor. Its checks are the same for every platform; statements about vendors come from their public documentation.
 ```
 
-The first line is the marker that identifies a report written by this skill.
+The first line is the marker that identifies a report written by this skill. Section 1 is this block: it has no `## 1.` heading of its own.
 
 ## 2. What was detected
 
@@ -73,7 +74,43 @@ A standalone description a reader can check against their own understanding of t
 
 The classification is per surface, not per app: one codebase can have all four.
 
-## 4. Integration inventory
+End the dossier with an **Architecture** subsection, the part a porting step works from. Cite `path:line` for every item:
+
+- **Client:** framework and router (React, Next.js, Vue, plain JavaScript), build tool, and where the vendor client or session object is created and what owns its lifetime (a module singleton, a React context, a store, component state).
+- **Server routes:** every route, job or handler that touches the vendor: the token endpoint (method, path, request fields, response fields, and the authentication in front of it), webhook and callback endpoints, and each vendor REST call.
+- **Identity:** where the user id and the display name come from and what type the id is (an Agora numeric uid, a name inside a Vonage token's `data`, a Stream user id); whether the client chooses it.
+- **Stored vendor ids:** database columns, caches or in-memory maps that hold session ids, channel names, archive or recording ids, or recording URLs.
+- **Recordings and other artifacts:** where recordings, transcripts and broadcast outputs end up, as far as the code shows (storage configuration, upload or download code). Storage set in a vendor dashboard is a question for section 12.
+- **Video UI:** the app's own video components (tiles, grids, controls, device pickers, lobby, ring screens), each with the Stream prebuilt component that could replace it, named in a reference file, or `keep custom`.
+- **Environment:** the names of the environment variables the video code reads. Never their values.
+- **Tests:** test files and mocks that reference the vendor SDK.
+
+In Stream mode, write only Client, Server routes and Video UI.
+
+## 4. What changes for this app on Stream
+
+Migration and hybrid modes. A short summary, built only from rows already in the report, of what moving changes for this app. It has two halves of equal standing, and every line cites the row ids behind it (`INV-`, `BC-`, `FL-`), which carry the `path:line`. Never state a benefit that has no row behind it, and never offer a feature the app does not need (`hub.md` honesty rule 6).
+
+**What the app gains.** Under these headings, leaving out any that would be empty:
+
+- **Code that goes away:** the number of `delete` rows (only `delete`: `rename` and `shape-shift` rows are code that changes, not code that goes away) and the files they touch, grouped by what the code did (for example subscription loops, layer selection, token renewal plumbing, reconnect bookkeeping, archive status polling). Then, as an option, the Video UI items from section 3 that a Stream prebuilt component could replace.
+- **Built-in features for hand-built ones:** each `upgrade` row: what the app built itself, the Stream feature that replaces it, and what the app gains, in one clause taken from the reference (for example server-owned ring timeouts and missed-call events).
+- **Rework needed on any platform:** code that depends on a product its vendor has deprecated or discontinued, quoting the vendor's notice as the reference gives it (Vonage In-App Messaging, Video Express, Agora Web SDK 3.x, `agora-access-token`). Say plainly that this work is needed whether or not the app moves.
+
+**What the app loses or must decide.** Every `gap` and `no-mapping` row, one line each with what the app loses, and every blocker-class flag (end-to-end encryption, fixed IPs, SIP dial-out). Same weight and tone as the gains; do not soften.
+
+**What drives cost.** One row per metered feature the code uses: participant minutes and the published resolution, recording, broadcast and HLS, RTMP, transcription and captions, noise cancellation, SIP and connectors.
+
+| Feature | What the code does | Rows | What to measure |
+|---|---|---|---|
+| Recording | <what is recorded, when it starts, composite or per participant, resolution> | <row ids> | <the volume to measure, for example recorded call minutes, or recorded participant minutes for per-participant files> |
+
+Then one paragraph: Stream's pricing page (`https://getstream.io/video/pricing/`) lists these features separately from participant minutes, in the units the Stream facts table in `hub.md` gives; <vendor> prices them on its own pricing page; compare the two with the app's own volumes. No prices, no totals, no "cheaper": the reader does the arithmetic with their numbers. Where Stream's pricing page does not list a feature the app uses (the facts table names them), say so and refer to Stream sales.
+
+In hybrid mode, cover only the remaining vendor code.
+
+
+## 5. Integration inventory
 
 One row per **integration site**: a place in the code that uses a vendor construct. Group rows by decision area (the nine areas in `hub.md`).
 
@@ -85,37 +122,41 @@ One row per **integration site**: a place in the code that uses a vendor constru
 
 - `rename` - same behaviour, different name
 - `shape-shift` - same intent, different call shape or arguments
-- `behavioral-diff` - looks equivalent, behaves differently (these also go into section 5)
+- `behavioral-diff` - looks equivalent, behaves differently (these also go into section 6)
 - `delete` - the Stream SDK does this itself; the code goes away
 - `config` - moves from code to call-type or dashboard configuration
 - `upgrade` - Stream offers a first-class feature for hand-rolled code (ringing, server-side moderation, native HLS)
-- `gap` - no Stream equivalent today (also goes into section 10)
-- `no-mapping` - this skill has no mapping for it (also goes into section 10)
+- `gap` - no Stream equivalent today (also goes into section 11)
+- `no-mapping` - this skill has no mapping for it (also goes into section 11)
 
-The vendor references' Class columns use three more forms, which never appear in the report as such. `flag`: the row also goes into section 10; give it `gap` when Stream has nothing for it, `no-mapping` when the reference gives only a partial mapping, otherwise the class of the Stream equivalent it names. Two classes joined (`shape-shift + config`, `delete (orchestration), config (storage, layout)`): write one inventory row per class. `X or Y`: the row's notes say which applies.
+The vendor references' Class columns use three more forms, which never appear in the report as such. `flag`: the row also goes into section 11; give it `gap` when Stream has nothing for it, `no-mapping` when the reference gives only a partial mapping, otherwise the class of the Stream equivalent it names. Two classes joined (`shape-shift + config`, `delete (orchestration), config (storage, layout)`): write one inventory row per class. `X or Y`: the row's notes say which applies.
 
-## 5. Behaviour changes to plan for
+## 6. Behaviour changes to plan for
 
 The constructs that a find-and-replace port gets wrong without any error: one row per kill-list trap from the vendor reference that this app actually hits, with the inventory rows it affects and what the port must do instead. List only traps with evidence in this codebase.
 
-## 6. Stream best-practice findings
+## 7. Stream best-practice findings
 
 Stream and hybrid modes only. One row per check in `stream-web.md` (or the platform's Stream reference), in its order:
 
 | Check | Verdict | Severity | Evidence | Fix |
 |---|---|---|---|---|
 
-## 7. General findings
+## 8. General findings
 
-One row per check in `general-checks.md`, G1 to G12, in order, same columns as section 6. Never skip a row. When the app has several vendors or several backends (hybrid mode, or Vonage on web and Agora on mobile), judge each check per vendor: any `FAIL` makes the row `FAIL`; otherwise any `NEEDS-REVIEW` makes it `NEEDS-REVIEW`. The Evidence column names the vendor or surface for each part.
+One row per check in `general-checks.md`, G1 to G13, in order, same columns as section 7. Never skip a row. When the app has several vendors or several backends (hybrid mode, or Vonage on web and Agora on mobile), judge each check per vendor: any `FAIL` makes the row `FAIL`; otherwise any `NEEDS-REVIEW` makes it `NEEDS-REVIEW`. The Evidence column names the vendor or surface for each part.
 
-## 8. Call-type configuration checklist
+## 9. Call-type configuration checklist
 
 Settings that move from code (session flags, token claims, per-room REST options) to Stream call-type configuration, one row each: the setting, its current source location, the Stream call-type setting it becomes, the value the code implies. Include target resolution (Stream bills per participant minute by the aggregated resolution of the video each participant receives; check the call type's target resolution against the layouts the app uses), recording mode and layout, backstage and join-ahead for livestreams, ring timeouts for calling surfaces, and the role and permission grid.
 
-## 9. Migration plan
+Then a **role mapping** table: one row per vendor role, token role or client-side role flag the code uses, with its source location, the Stream role it becomes, and the call-type capabilities that role needs (capability names from `hub.md`, for example `send-audio`, `send-video`, `mute-users`, `start-record-call`). Where the code decides roles on the client, say so: on Stream the server decides.
 
-Phases, each with its goal, the inventory rows it covers, what changes, and how to verify it. The default shape:
+## 10. Migration plan
+
+Start with the **size of the work**: one row per decision area, with the number of inventory rows, how many of them are `delete`, `upgrade`, `gap` and `no-mapping`, and the number of files they touch. Counts only; never estimate time or effort in days.
+
+Then phases, each with its goal, the inventory rows it covers, what changes, and how to verify it. The default shape:
 
 1. **Server first** - token minting, user identity, call types and permissions, recording and webhook handlers; both vendors' backends side by side.
 2. **One client surface at a time** - in the order the dossier suggests (usually the simplest surface first), behind a server-decided vendor switch.
@@ -124,44 +165,44 @@ Phases, each with its goal, the inventory rows it covers, what changes, and how 
 
 Then the **fleet-transition note**: which surfaces exist on which platforms, the rendezvous strategy per surface, the recommended transition option with its reason, and the early-prep checklist diffed against what the app already has. For web-only apps state that users switch as they load the new build, and say what still needs coordination (open tabs on the old build, recordings in flight, links already sent).
 
-In hybrid mode this section is "Finishing the transition": the remaining vendor code from section 4, plus the coexistence risks found (two token systems, two sets of webhooks, mobile installs that still point at the old vendor).
+In hybrid mode this section is "Finishing the transition": the remaining vendor code from section 5, plus the coexistence risks found (two token systems, two sets of webhooks, mobile installs that still point at the old vendor).
 
-## 10. Flag for a human
+## 11. Flag for a human
 
-Everything the skill could not decide: `gap` and `no-mapping` rows, product decisions (how to map roles, what to do with a feature Stream lacks), and blocker-class requirements (end-to-end encryption, fixed IPs, SIP dial-out, data residency). One row per item: what, where (`path:line`), why it needs a person, and who is best placed to answer (the app team, or Stream sales where the honesty rules route it there).
+Everything the skill could not decide: `gap` and `no-mapping` rows, product decisions (how to map roles, what to do with a feature Stream lacks), and blocker-class requirements (end-to-end encryption, fixed IPs, SIP dial-out, data residency). One row per item, with its `FL-` id (the same ids as the JSON block): what, where (`path:line`), why it needs a person, and who is best placed to answer (the app team, or Stream sales where the honesty rules route it there).
 
-## 11. Questions the code cannot answer
+## 12. Questions the code cannot answer
 
 Facts a migration plan needs that are not in the code: scale (peak concurrent participants per call, calls per day, largest livestream audience), the old vendor's contract end date, firewall or allow-list requirements in customers' networks, dashboard-side configuration of the current vendor, and anything the dossier marked as uncertain. Batch them; do not stop the audit to ask.
 
-## 12. Prioritised fix list
+## 13. Prioritised fix list
 
-Every `FAIL` and `NEEDS-REVIEW` from sections 6 and 7, Blockers first, then High, Medium, Low. One line each: check id, one-line fix, evidence. These fixes help whether or not the app migrates.
+Every `FAIL` and `NEEDS-REVIEW` from sections 7 and 8, Blockers first, then High, Medium, Low. One line each: check id, one-line fix, evidence. These fixes help whether or not the app migrates.
 
-## 13. What this skill cannot do
+## 14. What this skill cannot do
 
 State plainly, adapted to the app:
 
 - It read the code and nothing else: no dashboards, no vendor account settings, no production traffic, no runtime behaviour.
 - It changed nothing and proposes diffs only when asked.
-- It does not estimate cost or compare prices.
+- It names what drives cost but quotes no prices and compares none.
 - Mapping rows marked `verify against your SDK version` were not confirmed for the exact versions this app pins.
 - Platforms without a reference file in this skill version (name them) got a platform-level analysis only.
 
-## 14. How to continue
+## 15. How to continue
 
 - **Migration and hybrid mode:** to port the code, install the porting skill from Stream's agent-skills pack (`https://github.com/GetStream/agent-skills`) and give it this report. The Stream docs page "Migrate from <vendor> to Stream" covers the same ground for people. For commercial or roadmap questions, contact Stream at `https://getstream.io/contact/`.
 - **Stream mode:** to apply the fixes, install the pack's platform skill for this stack (for example `stream-react`) and ask it to fix the findings in this report.
 - **Neither mode:** nothing to continue with in this skill version; name what would be needed.
 
-## 15. Machine-readable block
+## 16. Machine-readable block
 
 The last section of the report is one fenced `json` block holding the same rows as the tables. The porting skill reads only this block, so it must be complete and valid JSON.
 
 ```json
 {
   "schema": "video-integration-audit/v1",
-  "skill_version": "0.1.0",
+  "skill_version": "0.2",
   "date": "YYYY-MM-DD",
   "mode": "migration",
   "detected": [
@@ -170,6 +211,28 @@ The last section of the report is one fenced `json` block holding the same rows 
   "surfaces": [
     { "id": "S1", "kind": "meeting", "platforms": ["web"], "entry": "web/src/main.js:21" }
   ],
+  "app": {
+    "client": { "framework": "react", "router": "none", "build": "vite", "client_owner": "web/src/room.js:12" },
+    "server": { "language": "javascript", "framework": "express", "entry": "server/index.js:1" }
+  },
+  "server_routes": [
+    { "id": "R1", "purpose": "token", "method": "GET", "path": "/api/token", "location": "server/index.js:40", "request": ["channel", "uid"], "response": ["token", "appId"], "auth": "none", "vendor_calls": ["RtcTokenBuilder.buildTokenWithUid"] }
+  ],
+  "identity": { "user_id_source": "client query string", "user_id_type": "agora numeric uid", "display_name_source": "client query string", "client_chosen": true, "evidence": ["web/src/main.js:8"] },
+  "roles": [
+    { "vendor_role": "host (client flag)", "source": "web/src/main.js:9", "stream_role": "host", "capabilities": ["send-audio", "send-video", "mute-users"], "decided_on": "client" }
+  ],
+  "persisted_vendor_ids": [
+    { "what": "channel name per room", "store": "rooms table, column agora_channel", "location": "server/db.js:22" }
+  ],
+  "artifacts": [
+    { "kind": "recording", "output": "composite", "storage": "S3 bucket from storageConfig", "location": "server/recording.js:30" }
+  ],
+  "ui_components": [
+    { "what": "remote video tile", "location": "web/src/Tile.jsx:1", "stream_component": "ParticipantView", "action": "replace" }
+  ],
+  "env": ["AGORA_APP_ID", "AGORA_APP_CERTIFICATE"],
+  "tests": [],
   "inventory": [
     {
       "id": "INV-01",
@@ -197,20 +260,36 @@ The last section of the report is one fenced `json` block holding the same rows 
   "flags": [
     { "id": "FL-01", "what": "end-to-end encryption", "location": "web/src/room.js:30", "owner": "stream-sales" }
   ],
-  "questions": ["Peak participants per call?"]
+  "questions": ["Peak participants per call?"],
+  "effort": [
+    { "decision_area": "track-device-lifecycle", "rows": 9, "delete": 4, "upgrade": 0, "gap": 0, "no_mapping": 1, "files": 3 }
+  ],
+  "changes": {
+    "gains": [
+      { "kind": "code-goes-away", "rows": ["INV-01", "INV-07"], "summary": "subscription loop and layer selection, 2 files" }
+    ],
+    "losses": [
+      { "rows": ["INV-22"], "summary": "no equivalent for maxIdleTime" }
+    ]
+  },
+  "cost_drivers": [
+    { "feature": "recording", "what": "composite recording of every lesson", "rows": ["INV-14"], "measure": "recorded call minutes", "listed_on_stream_pricing_page": true }
+  ]
 }
 ```
 
-`decision_area` takes one of: `tokens-identity`, `room-call-type`, `permissions`, `call-lifecycle`, `events-reconnect`, `track-device-lifecycle`, `ringing`, `recording-livestream`, `fleet-transition`, or `integrations` (SIP, AI agents and connectors, chat products; see `hub.md`). `findings[].set` is `general` (G1-G12) or `stream` (S-rows). `verify` is `true` when the row carries `verify against your SDK version`, otherwise `false`. `owner` is `app-team` or `stream-sales`. Omit keys that do not apply to the mode, but keep the array keys present (empty arrays are fine).
+`decision_area` takes one of: `tokens-identity`, `room-call-type`, `permissions`, `call-lifecycle`, `events-reconnect`, `track-device-lifecycle`, `ringing`, `recording-livestream`, `fleet-transition`, or `integrations` (SIP, AI agents and connectors, chat products; see `hub.md`). `findings[].set` is `general` (G1-G13) or `stream` (S-rows). `server_routes[].purpose` is `token`, `webhook`, `recording`, `broadcast`, `moderation`, `telephony` or `other`; `auth` names what guards the route, or `none`. `ui_components[].action` is `replace` or `keep-custom`. `changes.gains[].kind` is `code-goes-away`, `built-in-feature` or `rework-anyway`. `effort` counts come from the inventory; they are never time estimates. `verify` is `true` when the row carries `verify against your SDK version`, otherwise `false`. `owner` is `app-team` or `stream-sales`. Keep every top-level key present in every mode: an empty array, `null` for `app` and `identity` when there is nothing to describe, and `{ "gains": [], "losses": [] }` for `changes`. In Stream mode `changes`, `cost_drivers`, `effort` and `persisted_vendor_ids` are empty. `cost_drivers[].listed_on_stream_pricing_page` is `true` only when the pricing page lists a unit for the tier this app uses (a Full HD HLS broadcast is `false`: the page says contact sales).
 
 ## Self-check before writing
 
 - The header has the marker line, the coverage line and the publisher line.
-- All fifteen section headings are present, numbered 1 to 15, in order; the ones the mode does not use carry the single line `Not applicable in <mode> mode.` No extra sections.
-- Every general check G1-G12 has a row.
-- Every inventory row has a location, a decision area and a class; every `gap` and `no-mapping` row is also in section 10.
+- Section headings `## 2.` to `## 16.` are all present, in order, after the header block (which is section 1 and has no heading of its own); the ones the mode does not use carry the single line `Not applicable in <mode> mode.` No extra sections.
+- Every general check G1-G13 has a row.
+- Every inventory row has a location, a decision area and a class; every `gap` and `no-mapping` row is also in section 11.
 - SIP, DTMF, AI agents and audio connectors, and chat or messaging products are tagged `integrations`.
 - Every API name in the report appears in a reference file or is marked `verify against your SDK version`.
+- The dossier ends with the Architecture subsection; every route, stored id and UI component in it has a location.
+- Section 4: every line cites row ids; every `gap` and `no-mapping` row appears under what the app loses; the cost table quotes no prices and no totals.
 - No secret values, no personal data, no prices, no claims about either vendor beyond the references.
 - No private or one-recipient message is mapped to custom events, and no option suggests making it public (`targeted-signals`).
 - The JSON block parses (balanced braces, double-quoted keys, no trailing commas) and its row counts match the tables.

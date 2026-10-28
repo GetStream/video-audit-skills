@@ -46,7 +46,7 @@ Every inventory row belongs to one area (`decision_area` in the JSON block). Eac
 
 **Look for.** Session or channel creation options, room naming schemes, per-room flags passed to the server, any room-reuse rule.
 
-**Plan.** One call type per kind of surface (meeting, calling, livestream), the call-type configuration checklist (output contract section 8), and the call-id scheme (Stream call ids are chosen by the app, so appointment or room ids can be reused directly).
+**Plan.** One call type per kind of surface (meeting, calling, livestream), the call-type configuration checklist (output contract section 9), and the call-id scheme (Stream call ids are chosen by the app, so appointment or room ids can be reused directly).
 
 ### 3. Permissions are additive roles on the server (`permissions`)
 
@@ -155,14 +155,14 @@ These apply to every sentence the report writes about either platform.
 
 1. **Describe other vendors as their public documentation does.** No characterisation of their quality, roadmap, company or customers, and no comment on their pricing models. A limitation that a vendor's own documentation states, and that matters to the app, is reported plainly and without disparagement, exactly as Stream's own limitations are.
 2. **Say where Stream lacks something.** A `gap` row is stated plainly with what the app loses. Do not soften it and do not promise roadmap.
-3. **No prices, no cost comparisons.** State what drives cost on Stream: per participant minute, by the aggregated resolution of the video tracks each participant receives (see `https://getstream.io/video/pricing/`). Then point at the app's own settings that move it (published resolution, layouts, target resolution). Recommend checking the call type's target resolution against the layouts the app uses.
+3. **No prices, no cost comparisons.** State what drives cost on Stream: per participant minute, by the aggregated resolution of the video tracks each participant receives (see `https://getstream.io/video/pricing/`). Then point at the app's own settings that move it (published resolution, layouts, target resolution). Recommend checking the call type's target resolution against the layouts the app uses. Name the app's other metered features (recording, broadcast and HLS, transcription and captions, noise cancellation) in report section 4 with what to measure and the pricing-page units from the facts table below, and say where the other vendor publishes its own prices. The reader compares the two with their own volumes.
 4. **Refer to Stream sales** (`https://getstream.io/contact/`) for anything commercial or roadmap-dependent, and say it is a referral, not an answer:
    - **Fixed IPs and strict firewalls.** Stream publishes no fixed or static IP list; servers are a dynamically managed set. It works with a domain allowlist (`*.stream-io-video.com`, `*.stream-io-api.com`, `*.getstream.io`) and, at minimum, TURN over TLS on TCP 443. If the code shows a restricted-network setup (forced relay, custom TURN, a vendor IP allowlist or proxy add-on), name the file and line, state this, and refer the user to sales for their network's requirements.
    - **End-to-end encryption.** See the Stream facts below; always a flag for a human with a sales referral.
    - **SIP dial-out**, **on-premises deployment**, **dedicated infrastructure**, **data residency beyond what the docs state**, and **scale beyond the app's evident needs**: ask for the user's numbers, and refer.
    - **Mainland China.** Do not try to solve China-market delivery; say Stream's docs do not cover it and refer.
 5. **Never argue jurisdiction, ownership or commercials.** The report is technical.
-6. **Upgrade offers only where the code shows the need** (hand-rolled ringing -> Stream ringing; client-obeyed moderation -> server-enforced permissions; an external CDN or packager for HLS -> native HLS; a separate chat or signalling product -> Stream Chat). Never pitch features the app does not need.
+6. **Upgrade offers only where the code shows the need** (hand-rolled ringing -> Stream ringing; client-obeyed moderation -> server-enforced permissions; an external CDN or packager for HLS -> native HLS; a separate chat or signalling product -> Stream Chat; a `meeting` or `calling` surface where people speak, with no noise filter beyond the browser's own noise suppression -> Stream's noise cancellation). Every upgrade offer is an inventory row of class `upgrade`, so it reaches section 4 and the JSON block: for noise cancellation, place the row at the code that creates the microphone (`createMicrophoneAudioTrack(`, `OT.initPublisher(`) in decision area `track-device-lifecycle`. Never pitch features the app does not need, and never claim a measured quality or performance difference: no public benchmark in these references supports one.
 
 ## Stream facts the plan relies on
 
@@ -182,8 +182,9 @@ Verified against Stream's public documentation on 2026-10-22. Quote these, not m
 | Recording | composite, individual (up to six files per participant session), raw; up to 1440p; custom recording app via support. |
 | HLS and RTMP | HLS up to 1440p with up to three quality tracks; RTMP out and RTMP in supported; WebRTC livestream viewing. |
 | 4K | No preset: set `settings.video.target_resolution`; Stream's docs ask you to contact support. Recording and HLS stop at 1440p. |
-| AV1 | Selected automatically where supported (recent iPhones and Galaxy devices, Chrome, Firefox 136+, Safari 17+); the codec can switch during a call. |
+| AV1 | One of the codecs Stream's media servers handle, with VP8, VP9 and H.264. Which devices publish AV1 depends on the device and SDK version: never promise AV1 to an app (`verify against your SDK version`). |
 | SIP | Inbound SIP trunks only; outbound dialling is in development. DTMF arrives as `call.dtmf`. |
 | End-to-end encryption | Stream documents E2EE for React/JS, Android, iOS and Flutter (no React Native page), with keys distributed by the app; it cannot be combined with recording, transcription or HLS. Confirm availability for your plan with Stream before relying on it. |
 | Networking | No fixed IP list; domain allowlist; TURN-TLS on TCP 443 is the minimum workable path. |
 | Billing driver | Per participant minute, by the aggregated resolution of the video tracks each participant receives. |
+| Pricing page units | Checked 2026-10-28 on `https://getstream.io/video/pricing/`. Listed separately from participant minutes: noise cancellation (per 1,000 participant minutes); transcription and closed captions (per 1,000 call minutes); RTMP in and RTMP out (per 1,000 call minutes); recording, by quality from audio to Full HD (per 1,000 call minutes); HLS in SD and HD (per 1,000 participant minutes; Full HD and above: contact sales). Not listed: individual and raw recording, translation, SIP. Use these units in report section 4; never quote the prices. |
