@@ -41,7 +41,7 @@ Detects which video platform an app uses, audits the integration and writes the 
 
 | Detected | Report |
 |---|---|
-| Vonage Video (OpenTok, TokBox) or Agora | What moving changes for this app, built only from evidence in the code: what it gains, what it loses, and what drives its cost (named, never priced). Then an inventory of every integration site with its Stream Video equivalent, the behaviour changes a find-and-replace port gets wrong, a call-type configuration checklist, a phased migration plan with a fleet-transition note for mobile apps, general findings, and what needs a human decision |
+| Vonage Video (OpenTok, TokBox) or Agora | What moving changes for this app, built only from evidence in the code: what it gains and what it must change. A cost analysis names what drives its cost (never priced), says whether the code shows the app's usage volume, and points to Stream sales for a volume quote. Then an inventory of every integration site with its Stream Video equivalent, the behaviour changes a find-and-replace port gets wrong, a call-type configuration checklist, a phased migration plan with a fleet-transition note for mobile apps, general findings, and what needs a human decision |
 | Stream Video | Findings against Stream's public best practices with evidence and fixes, general findings, and a prioritised fix list. No migration plan, no vendor comparison |
 | Stream Video and Vonage or Agora | Both: the plan for the remaining vendor code, the Stream findings for the migrated part, and the coexistence risks |
 | Anything else (Twilio Video, Zoom Video SDK, 100ms, Daily, LiveKit, self-built WebRTC) or nothing | What was found, the general checks, and a plain statement that this version has no reference for that platform |

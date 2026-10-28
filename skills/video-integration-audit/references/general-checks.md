@@ -41,7 +41,7 @@ Run every check in every mode. In the "neither" mode (no supported video SDK fou
 | Vendor | Anchors |
 |---|---|
 | Agora | `buildTokenWithUid(` / `buildTokenWithUserAccount(` (`agora-token`: expiry in seconds from now, maximum 24 hours) or `buildTokenWithUid(` / `buildTokenWithAccount(` (deprecated `agora-access-token`: absolute epoch expiry); client `renewToken(` inside a `token-privilege-will-expire` handler |
-| Vonage | `generateToken(` (legacy `opentok`) / `generateClientToken(` (`@vonage/video`) with `expireTime` in epoch seconds (default 24 hours; Vonage's current token guide states a 24-hour maximum, the legacy SDK documents 30 days); a fresh token fetched for each new connection |
+| Vonage | `generateToken(` (legacy `opentok`) / `generateClientToken(` (`@vonage/video`) with `expireTime` in epoch seconds (default 24 hours. Vonage's token guide states a 24-hour maximum TTL, the legacy SDK documents 30 days, and the server SDKs do not enforce either: `@vonage/video` 1.31.1 writes any `expireTime` into the token, and a 30-day token connected in a live test on 2026-10-28. Whether Vonage refuses such a token later is unverified; this check fails it on its own 24-hour threshold either way); a fresh token fetched for each new connection |
 | Stream | `generateUserToken({ user_id, validity_in_seconds })`, `createToken(`; client `tokenProvider` (renews automatically) versus a static `token:` |
 
 ### G3. The token endpoint authenticates the caller and binds the token to that caller - Blocker
