@@ -2,7 +2,7 @@
 
 This file holds what every migration shares: how to detect the platform, the nine decision areas a migration plan must cover, the behaviour traps that recur across vendors, the honesty and referral rules, and the Stream facts the plan relies on. Vendor references (`vonage-web.md`, `agora-web.md`) hold only what is specific to that vendor and point here for the rest.
 
-**Pinned to:** `@stream-io/video-react-sdk` 1.44.0, `@stream-io/video-client` 1.62.0, `@stream-io/node-sdk` 0.8.14. Stream facts verified against Stream's public documentation on 2026-10-22. For other SDK versions, mark rows `verify against your SDK version`.
+**Pinned to:** `@stream-io/video-react-sdk` 1.44.1, `@stream-io/video-client` 1.63.0, `@stream-io/node-sdk` 0.8.14. Stream facts verified against Stream's public documentation on 2026-10-22 and rechecked against the 1.44.1 release on 2026-10-28. For other SDK versions, mark rows `verify against your SDK version`.
 
 ## Detection
 

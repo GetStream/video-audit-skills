@@ -1,6 +1,6 @@
 ---
 name: video-integration-audit
-description: "Read-only audit of an app's video calling, meeting or livestreaming integration, written to one markdown report. Detects the video platform in the code (Vonage Video API, OpenTok, TokBox, Agora, Stream Video; recognises Twilio Video, Zoom Video SDK, 100ms, Daily and LiveKit) and runs vendor-neutral checks: token minting, call lifecycle and cleanup, reconnects, server-enforced permissions, join and device error handling, autoplay and permission UX, cost-driving settings. For a Vonage or Agora app it adds an integration inventory and a phased plan for moving to Stream Video; for a Stream Video app, findings against Stream's best practices. Use when asked to audit or review a video integration, check it before launch, assess or plan a migration from Vonage, OpenTok, TokBox or Agora, or ask what moving to Stream would take. Reads files only, writes one report, runs no commands, makes no network calls."
+description: "Read-only audit of an app's video calling, meeting or livestreaming integration, written to one markdown report. Detects the video platform in the code (Vonage Video API, OpenTok, TokBox, Agora, Stream Video; recognises Twilio Video, Zoom Video SDK, 100ms, Daily and LiveKit) and runs vendor-neutral checks: token minting, call lifecycle and cleanup, reconnects, server-enforced permissions, join and device error handling, autoplay and permission UX, cost-driving settings. For a Vonage or Agora app it adds an integration inventory and a phased plan for moving to Stream Video; for a Stream Video app, findings against Stream's best practices. Use when asked to audit or review a video integration, check it before launch, assess or plan a migration from Vonage, OpenTok, TokBox or Agora, or ask what moving to Stream would take. Reads files only, writes one report, runs no commands, makes no network calls. Web apps get code-level mappings; mobile apps a platform-level analysis."
 license: Apache-2.0
 compatibility: Any coding agent that can read, list and search files and write one file. No CLI, no network access, no packages, no other skills.
 metadata:
@@ -86,7 +86,7 @@ Follow [`references/output-contract.md`](references/output-contract.md) exactly:
 
 ### 8. Reply
 
-In the chat: the report's path, the mode, the three to five most important findings, and the "How to continue" line from the report. Do not paste the report.
+In the chat: the report's path, the mode, the three to five most important findings, and the "How to continue" line from the report. If the app has iOS, Android, React Native or Flutter code, say in one sentence that those parts got a platform-level analysis only. Do not paste the report.
 
 ## Honesty rules (summary; the full set is in `hub.md`)
 

@@ -1,6 +1,6 @@
 # Stream Video on the web: best-practice checks
 
-**Pinned to:** `@stream-io/video-react-sdk` 1.44.0 (`@stream-io/video-client` 1.62.0), `@stream-io/node-sdk` 0.8.14. Verified 2026-10-22.
+**Pinned to:** `@stream-io/video-react-sdk` 1.44.1 (`@stream-io/video-client` 1.63.0), `@stream-io/node-sdk` 0.8.14. Verified 2026-10-22 against 1.44.0; rechecked against 1.44.1 on 2026-10-28 (no public API changes).
 
 **Source of truth:** Stream's public page "Integration best practices" for React (`https://getstream.io/video/docs/react/advanced/integration-best-practices/`, last changed 2026-09-08). The rows follow it and the read-only audit in Stream's agent-skills pack (`stream-react`, Video reference, "Integration best-practices audit"), last synced 2026-10-22. Where the two disagree, the public page wins, except where the SDK has since changed (noted per row). This version adds server-side and cross-cutting rows the page does not cover (marked "added").
 
@@ -51,7 +51,7 @@ These best-practice items are general checks (`general-checks.md`), reported onc
 | S17 | SDK styles imported | `@stream-io/video-react-sdk/dist/css/styles.css` | Imported once (`N/A` for fully custom UI) | Low |
 | S18 | Quality feedback collected | user rating UI, `call.submitFeedback(` | Some end-of-call feedback path exists | Low |
 | S19 | Unsupported browsers advised | supported-platform checks | Users on unsupported browsers are told so | Low |
-| S20 | SDK reasonably current | `package.json`, lockfile | `@stream-io/video-react-sdk` not more than about 10 minor versions behind 1.44.0 (the version this file was verified against, 2026-10-22); `FAIL` below 1.34.0. Point to the SDK's GitHub releases | Low |
+| S20 | SDK reasonably current | `package.json`, lockfile | `@stream-io/video-react-sdk` not more than about 10 minor versions behind 1.44.1 (the version this file is pinned to, 2026-10-28); `FAIL` below 1.34.0. Point to the SDK's GitHub releases | Low |
 
 ### Server and cross-cutting (added)
 

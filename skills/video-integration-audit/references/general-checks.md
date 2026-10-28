@@ -131,7 +131,7 @@ Run every check in every mode. In the "neither" mode (no supported video SDK fou
 |---|---|
 | Agora | `AgoraRTC.onAutoplayFailed =` (there is no default UI: without this callback blocked audio is silent) |
 | Vonage | subscriber `audioBlocked` / `audioUnblocked` events, `OT.unblockAudio()`, subscriber property `audioBlockedDisplayMode` |
-| Stream | `useIsAutoplayBlocked()` (React), `call.resumeAudio()` inside a user gesture; the default `ParticipantView` UI shows a blocked-audio overlay |
+| Stream | `useIsAutoplayBlocked()` (React), `call.resumeAudio()` inside a user gesture; the default `ParticipantView` UI shows a blocked-audio overlay. From `@stream-io/video-client` 1.63.0 (React SDK 1.44.1) any click or key press on the page also resumes blocked audio: that ends the silence at the first interaction but tells a user who has not interacted nothing, so it does not pass G9 on its own. Below that version, name the upgrade in the fix |
 
 ### G10. Device permission prompts are explained - High
 

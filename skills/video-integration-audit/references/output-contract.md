@@ -47,6 +47,7 @@ A section marked `no` keeps its heading with the single line `Not applicable in 
 - Skill: video-integration-audit <version from SKILL.md>
 - Mode: <migration | stream | hybrid | neither>
 - Scope: <root path audited>; <N> files read; excluded: <dirs>
+- Coverage: code-level for <the web platforms found, or "no platform">. <Only when the app has iOS, Android, React Native or Flutter code: "Platform-level only for <those platforms>."> This version has code-level references for web apps only.
 - Read-only: this audit read files and wrote this report. It ran no code and made no network calls.
 - Publisher: this skill is published by Stream (getstream.io), a video platform vendor. Its checks are the same for every platform; statements about vendors come from their public documentation.
 ```
@@ -78,7 +79,7 @@ One row per **integration site**: a place in the code that uses a vendor constru
 
 | ID | Location | Vendor construct | Decision area | Stream equivalent (SDK version) | Class | Notes |
 |---|---|---|---|---|---|---|
-| INV-01 | `web/src/room.js:40` | `client.on('user-published')` + `client.subscribe(user, mediaType)` | track-device-lifecycle | none needed: automatic subscription; render `call.state.participants$` (`@stream-io/video-client` 1.62.0) | delete | delete the subscribe loop |
+| INV-01 | `web/src/room.js:40` | `client.on('user-published')` + `client.subscribe(user, mediaType)` | track-device-lifecycle | none needed: automatic subscription; render `call.state.participants$` (`@stream-io/video-client` 1.63.0) | delete | delete the subscribe loop |
 
 `Class` is one of:
 
@@ -177,7 +178,7 @@ The last section of the report is one fenced `json` block holding the same rows 
       "construct": "client.on('user-published') + client.subscribe(user, mediaType)",
       "decision_area": "track-device-lifecycle",
       "stream_equivalent": "automatic subscription; render call.state.participants$",
-      "stream_sdk": "@stream-io/video-client@1.62.0",
+      "stream_sdk": "@stream-io/video-client@1.63.0",
       "class": "delete",
       "verify": false,
       "surface": "S1",
@@ -204,7 +205,7 @@ The last section of the report is one fenced `json` block holding the same rows 
 
 ## Self-check before writing
 
-- The header has the marker line and the publisher line.
+- The header has the marker line, the coverage line and the publisher line.
 - All fifteen section headings are present, numbered 1 to 15, in order; the ones the mode does not use carry the single line `Not applicable in <mode> mode.` No extra sections.
 - Every general check G1-G12 has a row.
 - Every inventory row has a location, a decision area and a class; every `gap` and `no-mapping` row is also in section 10.

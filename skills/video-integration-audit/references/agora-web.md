@@ -1,6 +1,6 @@
 # Agora on the web -> Stream Video
 
-**Pinned to:** Agora `agora-rtc-sdk-ng` 4.24.9, `agora-rtc-sdk` 3.6.11 (deprecated), `agora-rtc-react` 2.5.1, `agora-rtm-sdk` 2.3.0 (and 1.5.1 for RTM 1.x), `agora-token` 2.0.7, `agora-access-token` 2.0.4 (deprecated). Stream side: `@stream-io/video-react-sdk` 1.44.0, `@stream-io/video-client` 1.62.0, `@stream-io/node-sdk` 0.8.14. Agora names verified against the published package typings and `docs.agora.io` on 2026-10-22; Stream names against Stream's public docs the same day. Other versions: mark rows `verify against your SDK version`.
+**Pinned to:** Agora `agora-rtc-sdk-ng` 4.24.9, `agora-rtc-sdk` 3.6.11 (deprecated), `agora-rtc-react` 2.5.1, `agora-rtm-sdk` 2.3.0 (and 1.5.1 for RTM 1.x), `agora-token` 2.0.7, `agora-access-token` 2.0.4 (deprecated). Stream side: `@stream-io/video-react-sdk` 1.44.1, `@stream-io/video-client` 1.63.0, `@stream-io/node-sdk` 0.8.14. Agora names verified against the published package typings and `docs.agora.io` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28. Other versions: mark rows `verify against your SDK version`.
 
 Read `hub.md` first: the decision areas, the cross-vendor traps and the honesty rules live there. This file adds what is specific to Agora.
 
@@ -31,7 +31,7 @@ Agora is an engine plus imperative callbacks: the app creates local tracks, publ
 
 ## Mapping (4.x)
 
-Stream equivalents are for `@stream-io/video-client` 1.62.0 and `@stream-io/video-react-sdk` 1.44.0.
+Stream equivalents are for `@stream-io/video-client` 1.63.0 and `@stream-io/video-react-sdk` 1.44.1.
 
 ### Tokens and identity
 

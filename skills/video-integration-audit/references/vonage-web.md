@@ -1,6 +1,6 @@
 # Vonage Video API on the web -> Stream Video
 
-**Pinned to:** Vonage `@vonage/client-sdk-video` 2.35.3 (same code as `@opentok/client` 2.35.3), server `@vonage/video` 1.31.1 (used by `@vonage/server-sdk` 3.30.1) and legacy `opentok` 2.24.0, `@vonage/video-express` 1.10.3 (deprecated), React Native `@vonage/client-sdk-video-react-native` / `opentok-react-native` 2.34.1. Stream side: `@stream-io/video-react-sdk` 1.44.0, `@stream-io/video-client` 1.62.0, `@stream-io/node-sdk` 0.8.14. Vonage names verified against the published package typings, the Vonage Video JS reference and `developer.vonage.com` on 2026-10-22; Stream names against Stream's public docs the same day. Other versions: mark rows `verify against your SDK version`.
+**Pinned to:** Vonage `@vonage/client-sdk-video` 2.35.3 (same code as `@opentok/client` 2.35.3), server `@vonage/video` 1.31.1 (used by `@vonage/server-sdk` 3.30.1) and legacy `opentok` 2.24.0, `@vonage/video-express` 1.10.3 (deprecated), React Native `@vonage/client-sdk-video-react-native` / `opentok-react-native` 2.34.1. Stream side: `@stream-io/video-react-sdk` 1.44.1, `@stream-io/video-client` 1.63.0, `@stream-io/node-sdk` 0.8.14. Vonage names verified against the published package typings, the Vonage Video JS reference and `developer.vonage.com` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28. Other versions: mark rows `verify against your SDK version`.
 
 Read `hub.md` first. This file adds what is specific to Vonage.
 
@@ -32,7 +32,7 @@ Vonage's unified and legacy web clients are **the same SDK under two names** (`@
 
 ## Mapping
 
-Stream equivalents are for `@stream-io/video-client` 1.62.0, `@stream-io/video-react-sdk` 1.44.0 and `@stream-io/node-sdk` 0.8.14.
+Stream equivalents are for `@stream-io/video-client` 1.63.0, `@stream-io/video-react-sdk` 1.44.1 and `@stream-io/node-sdk` 0.8.14.
 
 ### Server: sessions, tokens and identity
 

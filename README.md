@@ -37,7 +37,7 @@ If the iOS app, the Android app and the web page live in separate repositories, 
 
 ### video-integration-audit
 
-Detects which video platform an app uses, audits the integration and writes the findings to one markdown file. What the report contains depends on what was detected:
+Detects which video platform an app uses, audits the integration and writes the findings to one markdown file. **This version reads web apps in depth** (JavaScript and TypeScript clients and Node servers); iOS, Android, React Native and Flutter code gets a platform-level analysis only, as the coverage table below explains, and every report says which parts of the app got which. What the report contains depends on what was detected:
 
 | Detected | Report |
 |---|---|
