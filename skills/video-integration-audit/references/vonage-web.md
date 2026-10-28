@@ -85,7 +85,7 @@ Stream equivalents are for `@stream-io/video-client` 1.62.0, `@stream-io/video-r
 | `streamPropertyChanged` (`hasAudio`, `hasVideo`, `videoDimensions`) | participant state | delete | |
 | `signal` / `signal:<type>` | `call.on('custom', e => ...)`, filtered on a payload field | shape-shift | Per-type listeners become in-handler filtering |
 | `archiveStarted` / `archiveStopped` | `call.recording_started` / `call.recording_stopped` (plus `call.recording_ready`, `call.recording_failed`) | rename | |
-| `muteForced` | `call.user_muted`; microphone state changes | shape-shift | |
+| `muteForced` | `call.user_muted`; microphone state changes | shape-shift | Fired on the muted client's `Publisher` for both `forceMuteStream` and `forceMuteAll`, and on the `Session` only for `forceMuteAll`. An app that listens on the `Session` alone keeps showing a single-stream mute as unmuted: report it as a code fact. |
 | `OT.on('exception')` | promise rejections; `onError` on controls | shape-shift | |
 
 ### Signalling
