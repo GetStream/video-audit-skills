@@ -64,6 +64,8 @@ Ask your agent, in the repository you want audited:
 
 or, more specifically, "What would moving this app from Vonage to Stream take?" or "Check our Stream Video integration before launch." The agent writes `video-integration-audit.md` and replies with the top findings.
 
+To see what a report looks like, [`examples/video-integration-audit/`](examples/video-integration-audit/) has a full, unedited one for a fictional Vonage app that records its calls.
+
 ## Install
 
 Copy one skill's folder into your agent's skills folder. Nothing else in this repository is needed.

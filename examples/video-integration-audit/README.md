@@ -1,0 +1,7 @@
+# Example: video-integration-audit report
+
+[`videoclaim-report.md`](videoclaim-report.md) is an unedited report from `video-integration-audit` 0.2 (Claude Code, run headless with only file read, search and one write allowed). The only change is the Scope line, where the audited folder's absolute path on the test machine was shortened to `videoclaim/`.
+
+The audited app, VideoClaim, is made up for this example: a remote damage-inspection tool for a fictional home insurer, ExampleCompany Mutual. An adjuster sends a policyholder a join link, the policyholder shows the damage with their phone camera, the adjuster takes still photos, and every inspection is recorded as one composed recording that the adjuster saves to the claim file. It is a small web app on the Vonage Video API (Express, `@vonage/video` 1.31.1, `@vonage/client-sdk-video` 2.35.3 from a CDN script tag, jQuery), written by an AI model to look like a few-year-old production app, including the shortcuts such apps tend to carry. It ran a full inspection end to end on a live Vonage account (two browsers, video both ways, chat, a photo, a saved recording) before it was audited.
+
+The app's source is not in this repository, so the report's `file:line` citations point into code you cannot open here. Read the report for what a team gets back: the usage dossier and architecture, what changes for the app on Stream, the cost analysis, the integration inventory, the general checks and the machine-readable block at the end.
