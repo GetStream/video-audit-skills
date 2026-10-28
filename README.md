@@ -21,6 +21,7 @@ Each `SKILL.md` declares its `allowed-tools` for Claude Code. Not every agent ho
 | Skill | What it audits | Writes |
 |---|---|---|
 | [`stream-video-webview-audit`](skills/stream-video-webview-audit/) | A native iOS or Android app that runs Stream's React video SDK inside a WebView (WKWebView, Android WebView, Capacitor, a React Native WebView, an in-app browser) | Nothing; the report is in the agent's reply |
+| [`video-integration-audit`](skills/video-integration-audit/) | An app's video calling, meeting or livestreaming integration: detects Vonage Video, Agora or Stream Video, and recognises Twilio Video, Zoom Video SDK, 100ms, Daily and LiveKit | One file: `video-integration-audit.md` at the audited root, or a path you name |
 
 ### stream-video-webview-audit
 
@@ -33,6 +34,35 @@ Ask your agent, in the repository you want audited:
 > Audit the WebView video integration in this repository.
 
 If the iOS app, the Android app and the web page live in separate repositories, run it in each, or open all of them in one workspace. If the web page is not in the repository, tell the agent which `@stream-io/video-react-sdk` version it runs.
+
+### video-integration-audit
+
+Detects which video platform an app uses, audits the integration and writes the findings to one markdown file. What the report contains depends on what was detected:
+
+| Detected | Report |
+|---|---|
+| Vonage Video (OpenTok, TokBox) or Agora | An inventory of every integration site with its Stream Video equivalent, the behaviour changes a find-and-replace port gets wrong, a call-type configuration checklist, a phased migration plan with a fleet-transition note for mobile apps, general findings, and what needs a human decision |
+| Stream Video | Findings against Stream's public best practices with evidence and fixes, general findings, and a prioritised fix list. No migration plan, no vendor comparison |
+| Stream Video and Vonage or Agora | Both: the plan for the remaining vendor code, the Stream findings for the migrated part, and the coexistence risks |
+| Anything else (Twilio Video, Zoom Video SDK, 100ms, Daily, LiveKit, self-built WebRTC) or nothing | What was found, the general checks, and a plain statement that this version has no reference for that platform |
+
+The general checks run in every mode, with the same verdicts and severities whichever platform the app uses, and cover token minting and lifetime, whether the token endpoint authenticates its caller, secrets in client code, join and device error handling, cleanup on leave, reconnect handling, server-enforced permissions, autoplay and permission UX, cost-driving media settings, and webhook verification. Every finding cites `file:line`. The report ends with a machine-readable JSON block (`video-integration-audit/v1`) holding the same rows, which a porting skill can take as its input.
+
+The skill describes other vendors as their public documentation does, never comments on their pricing, and computes no cost comparisons. Documented limitations of any platform, Stream's included, are stated plainly and without disparagement; where Stream lacks something your app uses, the report says so. Every report states that it is published by Stream, and requirements the code cannot settle (fixed IPs, end-to-end encryption, SIP dial-out, on-premises deployment) are referred to Stream's sales team rather than argued. The full rules are in [`references/hub.md`](skills/video-integration-audit/references/hub.md#honesty-and-referral-rules).
+
+| Platform | Web | iOS | Android | React Native |
+|---|---|---|---|---|
+| Vonage Video | yes | platform-level analysis only | platform-level analysis only | concepts from the web reference |
+| Agora | yes | platform-level analysis only | platform-level analysis only | concepts from the web reference |
+| Stream Video | yes | not yet | not yet | concepts from the web reference |
+
+"Platform-level analysis" means the full inventory, plan and general checks, with Stream symbols marked "verify against your SDK version". Mapping tables are pinned to the SDK versions named at the top of each reference file and were verified against the vendors' public documentation and published packages on the date given there.
+
+Ask your agent, in the repository you want audited:
+
+> Audit the video integration in this repository.
+
+or, more specifically, "What would moving this app from Vonage to Stream take?" or "Check our Stream Video integration before launch." The agent writes `video-integration-audit.md` and replies with the top findings.
 
 ## Install
 
