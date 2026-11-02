@@ -1,6 +1,6 @@
 # Stream Video on the web: best-practice checks
 
-**Pinned to:** `@stream-io/video-react-sdk` 1.44.1 (`@stream-io/video-client` 1.63.0), `@stream-io/node-sdk` 0.8.14. Verified 2026-10-22 against 1.44.0; rechecked against 1.44.1 on 2026-10-28 (no public API changes).
+**Pinned to:** `@stream-io/video-react-sdk` 1.45.0 (`@stream-io/video-client` 1.64.0), `@stream-io/node-sdk` 0.8.14. Verified 2026-10-22 against 1.44.0; rechecked against 1.44.1 on 2026-10-28 (no public API changes) and against 1.45.0 on 2026-11-02 (no API removed or renamed; added: the noise-cancellation status, `call.setCaptureWindow()`).
 
 **Source of truth:** Stream's public page "Integration best practices" for React (`https://getstream.io/video/docs/react/advanced/integration-best-practices/`, last changed 2026-09-08). The rows follow it and the read-only audit in Stream's agent-skills pack (`stream-react`, Video reference, "Integration best-practices audit"), last synced 2026-10-22. Where the two disagree, the public page wins, except where the SDK has since changed (noted per row). This version adds server-side and cross-cutting rows the page does not cover (marked "added").
 
@@ -51,7 +51,7 @@ These best-practice items are general checks (`general-checks.md`), reported onc
 | S17 | SDK styles imported | `@stream-io/video-react-sdk/dist/css/styles.css` | Imported once (`N/A` for fully custom UI) | Low |
 | S18 | Quality feedback collected | user rating UI, `call.submitFeedback(` | Some end-of-call feedback path exists | Low |
 | S19 | Unsupported browsers advised | supported-platform checks | Users on unsupported browsers are told so | Low |
-| S20 | SDK reasonably current | `package.json`, lockfile | `@stream-io/video-react-sdk` not more than about 10 minor versions behind 1.44.1 (the version this file is pinned to, 2026-10-28); `FAIL` below 1.34.0. Point to the SDK's GitHub releases | Low |
+| S20 | SDK reasonably current | `package.json`, lockfile | `@stream-io/video-react-sdk` not more than about 10 minor versions behind 1.45.0 (the version this file is pinned to, 2026-11-02); `FAIL` below 1.34.0. Point to the SDK's GitHub releases | Low |
 
 ### Server and cross-cutting (added)
 
@@ -67,7 +67,7 @@ These best-practice items are general checks (`general-checks.md`), reported onc
 | S28 | Live captions use closed captions | `startTranscription(`, `startClosedCaptions(`, `call.closed_caption` | Live captions come from `startClosedCaptions()`; `startTranscription()` is for the post-call transcript | Medium (`N/A` without captions) |
 | S29 | RTMP ingest keys last long enough | `ingress.rtmp`, `useCallIngress`, `generateUserToken(` used as a stream key | The user token used as an RTMP stream key is valid for the broadcast's length (the default token lifetime is 1 hour) | Medium (`N/A` without RTMP ingest) |
 | S30 | Target resolution fits the layouts | `target_resolution`, call-type settings, layout components | The call type's `settings.video.target_resolution` fits the layouts the app renders; Stream bills per participant minute by the aggregated resolution of the video each participant receives, so a grid of small tiles rarely needs the default type's high target. Link the pricing page; quote no prices | Low |
-| S31 | Noise cancellation considered where people speak | `NoiseCancellationProvider`, `useNoiseCancellation`, `NoiseCancellation` from `@stream-io/audio-filters-web`, `call.microphone.enableNoiseCancellation(` | `meeting` and `calling` surfaces where people speak offer Stream's noise cancellation (desktop browsers), or the report notes it as an option. A missing filter is `NEEDS-REVIEW`, never `FAIL`: it is a product choice, metered separately on the pricing page | Low (`N/A` for listen-only and livestream-viewer surfaces) |
+| S31 | Noise cancellation considered where people speak | `NoiseCancellationProvider`, `useNoiseCancellation`, `NoiseCancellation` from `@stream-io/audio-filters-web`, `call.microphone.enableNoiseCancellation(` | `meeting` and `calling` surfaces where people speak offer Stream's noise cancellation (desktop browsers), or the report notes it as an option. A missing filter is `NEEDS-REVIEW`, never `FAIL`: it is a product choice, metered separately on the pricing page. From 1.45.0 the filter turns itself off when the device cannot keep up and reports why: `useNoiseCancellation().status` (React) or `call.microphone.state.noiseCancellationStatus$` is `suspended` (it will retry) or `overloaded` (it stays off). A toggle that shows only on and off then looks as if the user turned it off; note it if the app's toggle ignores the status | Low (`N/A` for listen-only and livestream-viewer surfaces) |
 
 ## Fix list
 

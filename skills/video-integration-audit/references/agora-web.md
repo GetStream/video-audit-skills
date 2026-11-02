@@ -1,6 +1,6 @@
 # Agora on the web -> Stream Video
 
-**Pinned to:** Agora `agora-rtc-sdk-ng` 4.24.9, `agora-rtc-sdk` 3.6.11 (deprecated), `agora-rtc-react` 2.5.1, `agora-rtm-sdk` 2.3.0 (and 1.5.1 for RTM 1.x), `agora-token` 2.0.7, `agora-access-token` 2.0.4 (deprecated). Stream side: `@stream-io/video-react-sdk` 1.44.1, `@stream-io/video-client` 1.63.0, `@stream-io/node-sdk` 0.8.14. Agora names verified against the published package typings and `docs.agora.io` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28. Other versions: mark rows `verify against your SDK version`.
+**Pinned to:** Agora `agora-rtc-sdk-ng` 4.24.9, `agora-rtc-sdk` 3.6.11 (deprecated), `agora-rtc-react` 2.5.1, `agora-rtm-sdk` 2.3.0 (and 1.5.1 for RTM 1.x), `agora-token` 2.0.7, `agora-access-token` 2.0.4 (deprecated). Stream side: `@stream-io/video-react-sdk` 1.45.0, `@stream-io/video-client` 1.64.0, `@stream-io/node-sdk` 0.8.14. Agora names verified against the published package typings and `docs.agora.io` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28 and the 1.45.0 release on 2026-11-02. Other versions: mark rows `verify against your SDK version`.
 
 Read `hub.md` first: the decision areas, the cross-vendor traps and the honesty rules live there. This file adds what is specific to Agora.
 
@@ -31,7 +31,7 @@ Agora is an engine plus imperative callbacks: the app creates local tracks, publ
 
 ## Mapping (4.x)
 
-Stream equivalents are for `@stream-io/video-client` 1.63.0 and `@stream-io/video-react-sdk` 1.44.1.
+Stream equivalents are for `@stream-io/video-client` 1.64.0 and `@stream-io/video-react-sdk` 1.45.0.
 
 ### Tokens and identity
 
@@ -60,7 +60,7 @@ Stream equivalents are for `@stream-io/video-client` 1.63.0 and `@stream-io/vide
 |---|---|---|---|
 | `createMicrophoneAudioTrack()`, `createCameraVideoTrack()`, `createMicrophoneAndCameraTracks()` + `client.publish([...])` | `call.microphone.enable()`, `call.camera.enable()` (before or after join) | shape-shift | Two steps become one. Set device state explicitly before `join()` (`publish-on-join` in `hub.md`) |
 | `encoderConfig: '720p_1'`, `'1080p_1'`, `{ width, height, frameRate, bitrate }` | call type `settings.video.target_resolution`; the SDK publishes simulcast layers | config | Record the value (G11); see the billing note in `hub.md`. No `encoderConfig` at all means Agora's default, `480p_1` (640x480 at 15 fps, 500 Kbps, per Agora's typings): record that as the app's effective setting and choose the Stream target resolution deliberately |
-| `createMicrophoneAudioTrack({ AEC, ANS, AGC })` (the browser's echo cancellation, noise suppression and gain control) | none needed: Stream's microphone asks the browser for echo cancellation, noise suppression and gain control by default; `call.microphone.setDefaultConstraints(...)` overrides them | delete | Turning them off on purpose (music, instruments) is a product choice: keep it with `setDefaultConstraints`. The browser's noise suppression is not Stream's noise cancellation (see the AI denoiser row) |
+| `createMicrophoneAudioTrack({ AEC, ANS, AGC })` (the browser's echo cancellation, noise suppression and gain control) | none needed: Stream's microphone asks the browser for echo cancellation, noise suppression and gain control by default (from 1.45.0 it turns the browser's noise suppression off while Stream's noise cancellation is registered, so the two are not stacked); `call.microphone.setDefaultConstraints(...)` overrides them | delete | Turning them off on purpose (music, instruments) is a product choice: keep it with `setDefaultConstraints`. The browser's noise suppression is not Stream's noise cancellation (see the AI denoiser row) |
 | `client.on('user-published', (user, mediaType) => client.subscribe(user, mediaType))` + `user.videoTrack.play(el)` / `user.audioTrack.play()` | none: automatic subscription; render `useParticipants()` / `call.state.participants$` with `<ParticipantView participant={p} />` (React) or `call.bindVideoElement(el, sessionId, 'videoTrack')` + `call.bindAudioElement(el, sessionId)` (plain JS) | delete | `subscribe-loop` trap |
 | App stylesheets on `.agora_video_player` (the element `track.play(el)` inserts) | none: Stream renders into elements the app owns (`call.bindVideoElement`) or `<ParticipantView>` | delete | Carry over what the rules did (fit, mirroring, rounded corners) to the new video elements |
 | `user-unpublished`, `user-joined`, `user-left` handlers that edit the DOM | participant state; discrete events `call.session_participant_joined` / `call.session_participant_left` if business logic needs them | delete | Keep only the business logic, moved to state or webhooks |
@@ -81,7 +81,7 @@ Stream equivalents are for `@stream-io/video-client` 1.63.0 and `@stream-io/vide
 | Agora construct | Stream equivalent | Class | Notes |
 |---|---|---|---|
 | `AgoraRTC.createScreenVideoTrack(config, withAudio)` published on a **second client** joined with its own uid | `call.screenShare.enable()` / `disable()` / `toggle()` on the same call; `call.screenShare.enableScreenShareAudio()`; render with `<ParticipantView participant={p} trackType="screenShareTrack" />` where `hasScreenShare(p)` | behavioral-diff | `screen-share-client` trap: delete the second client, its token request and every uid-offset convention |
-| `encoderConfig` / `optimizationMode: 'detail' \| 'motion'` on the screen track | `call.screenShare.setSettings({ maxFramerate, maxBitrate, contentHint })` before enabling | shape-shift | |
+| `encoderConfig` / `optimizationMode: 'detail' \| 'motion'` on the screen track | `call.screenShare.setSettings({ maxFramerate, maxBitrate, contentHint })` before enabling; `optimizationMode` becomes `contentHint: 'detail'` or `'motion'` | shape-shift | From 1.45.0 the hint sets what gives way under load: `motion` keeps the frame rate, `detail` and `text` keep the resolution; with no hint the share keeps its resolution. Earlier releases ignored the hint for this |
 | `track-ended` on the screen track | screen-share state (`useScreenShareState()`) | delete | |
 
 ### Signalling, host controls and ringing

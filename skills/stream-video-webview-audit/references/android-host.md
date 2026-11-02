@@ -113,7 +113,7 @@ window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 ```
 
-(In React SDK 1.44.1 only the prebuilt embedded call and livestream components (`@stream-io/video-react-sdk/embedded`) request a Screen Wake Lock while joined, and a request can be refused; a page built from the other components or the client does not. The page can request one itself: `navigator.wakeLock.request('screen')` resolves in WebView 124 and 133. The host flag is the reliable answer.)
+(In React SDK 1.44.1 and 1.45.0 only the prebuilt embedded call and livestream components (`@stream-io/video-react-sdk/embedded`) request a Screen Wake Lock while joined, and a request can be refused; a page built from the other components or the client does not. The page can request one itself: `navigator.wakeLock.request('screen')` resolves in WebView 124 and 133. The host flag is the reliable answer.)
 
 ## 3. Never reload or recreate the call page as a side effect
 
@@ -199,7 +199,7 @@ override fun onNewIntent(intent: Intent) {
 
 ## 7. Microphone permission: ask natively first, then grant only what was asked
 
-**What we observed.** If the page's microphone request was denied once (for example while the app was still showing Android's own permission dialog), Stream's SDK, on every version we tested up to and including 1.44.1, did not ask again in that page, and unmute did nothing until a reload. The host side:
+**What we observed.** If the page's microphone request was denied once (for example while the app was still showing Android's own permission dialog), Stream's SDK, on every version we tested up to and including 1.44.1, did not ask again in that page, and unmute did nothing until a reload. The 1.45.0 source behaves the same way. The host side:
 
 ```kotlin
 // WebView settings for a call page
@@ -270,7 +270,7 @@ if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
 }
 ```
 
-In the other direction, tell the page what only native code sees, so that a complaint can be matched to a cause later: app background / foreground, the renderer restart from item 4, the service failing to reach the foreground from item 1, audio focus loss, and the real OS version. Send each event as one JSON object (`name`, `payload`, `timestamp` in Unix milliseconds, `os`) passed as a string literal, never spliced into JavaScript source as text; the iOS host in the companion reference uses the same shape, so one page handler serves both. An event evaluated into a page that is suspended, not yet loaded or gone is lost, so keep the last 50 natively, deliver only after the current page has sent `page.ready`, and replay the buffer then (above). A new navigation, a renderer death or replacing the WebView resets that. Do all of this on the main thread. The page writes them to the app's own logs with timestamps, the call id and the local participant's session id. After a join, React SDK 1.44.1 records page visibility and `freeze` / `resume` in the call's traces by itself (when stats reporting is enabled for the call), but has no API meant for events reported by the host.
+In the other direction, tell the page what only native code sees, so that a complaint can be matched to a cause later: app background / foreground, the renderer restart from item 4, the service failing to reach the foreground from item 1, audio focus loss, and the real OS version. Send each event as one JSON object (`name`, `payload`, `timestamp` in Unix milliseconds, `os`) passed as a string literal, never spliced into JavaScript source as text; the iOS host in the companion reference uses the same shape, so one page handler serves both. An event evaluated into a page that is suspended, not yet loaded or gone is lost, so keep the last 50 natively, deliver only after the current page has sent `page.ready`, and replay the buffer then (above). A new navigation, a renderer death or replacing the WebView resets that. Do all of this on the main thread. The page writes them to the app's own logs with timestamps, the call id and the local participant's session id. After a join, React SDK 1.44.1 and later record page visibility and `freeze` / `resume` in the call's traces by itself (when stats reporting is enabled for the call), but has no API meant for events reported by the host.
 
 ```kotlin
 private val hostEvents = ArrayDeque<JSONObject>()

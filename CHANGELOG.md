@@ -2,6 +2,22 @@
 
 Entries are per skill, newest first. Each skill is versioned on its own; see "Versions" in [`README.md`](README.md).
 
+## stream-video-webview-audit 0.6 (2026-11-02)
+
+Checked against `@stream-io/video-react-sdk` 1.45.0 (`@stream-io/video-client` 1.64.0). What 1.45.0 changes comes from its source and release notes; the device runs behind the observations were not repeated on it.
+
+- B7 now asks for 1.45.0 or later. 1.45.0 no longer leaves a call offline after a stale browser `offline` event on a working network, and `call.leave()` no longer hangs on a pending quality change. It restarts remote audio after an iOS audio interruption, and it retries a token refresh that fails during a reconnect. The stale `offline` event is no longer listed as having no host fix.
+- A11, B3, B5 and the iOS reference: the SDK now notices an iOS audio interruption and restarts remote audio when it ends, but does not tell the page, so the host's log is still the only record of the cause.
+- B6: from 1.45.0 a screen share's `contentHint` sets what gives way under load (`motion` keeps the frame rate, `detail` and `text` keep the resolution), and the share's bitrate cap is no longer scaled down to its starting capture size.
+- A9 and the Android reference: 1.45.0 still does not ask for the microphone again after one denial.
+
+## video-integration-audit 0.2.1 (2026-11-02)
+
+- Stream equivalents pinned to `@stream-io/video-react-sdk` 1.45.0 (`@stream-io/video-client` 1.64.0); no API the references name was removed or renamed. S20 measures against 1.45.0.
+- S31: from 1.45.0, noise cancellation turns itself off when the device cannot keep up and reports `suspended` or `overloaded`; a toggle that shows only on and off misreads that.
+- Microphone-processing rows (Vonage, Agora): from 1.45.0 the browser's noise suppression is off while Stream's noise cancellation is registered.
+- Screen-share rows (Vonage, Agora): from 1.45.0 `contentHint` sets what gives way under load; Agora's `optimizationMode` maps onto it.
+
 ## video-integration-audit 0.2 (2026-10-28)
 
 First public version (0.1 was internal only). Detects the video platform in the code (Vonage Video API, OpenTok, TokBox, Agora, Stream Video; recognises Twilio Video, Zoom Video SDK, 100ms, Daily and LiveKit) and reports in one of four modes: migration, stream, hybrid or neither. Code-level references cover web apps; iOS, Android, React Native and Flutter code gets a platform-level analysis.

@@ -1,6 +1,6 @@
 # Vonage Video API on the web -> Stream Video
 
-**Pinned to:** Vonage `@vonage/client-sdk-video` 2.35.3 (same code as `@opentok/client` 2.35.3), server `@vonage/video` 1.31.1 (used by `@vonage/server-sdk` 3.30.1) and legacy `opentok` 2.24.0, `@vonage/video-express` 1.10.3 (deprecated), React Native `@vonage/client-sdk-video-react-native` / `opentok-react-native` 2.34.1. Stream side: `@stream-io/video-react-sdk` 1.44.1, `@stream-io/video-client` 1.63.0, `@stream-io/node-sdk` 0.8.14. Vonage names verified against the published package typings, the Vonage Video JS reference and `developer.vonage.com` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28. Other versions: mark rows `verify against your SDK version`.
+**Pinned to:** Vonage `@vonage/client-sdk-video` 2.35.3 (same code as `@opentok/client` 2.35.3), server `@vonage/video` 1.31.1 (used by `@vonage/server-sdk` 3.30.1) and legacy `opentok` 2.24.0, `@vonage/video-express` 1.10.3 (deprecated), React Native `@vonage/client-sdk-video-react-native` / `opentok-react-native` 2.34.1. Stream side: `@stream-io/video-react-sdk` 1.45.0, `@stream-io/video-client` 1.64.0, `@stream-io/node-sdk` 0.8.14. Vonage names verified against the published package typings, the Vonage Video JS reference and `developer.vonage.com` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28 and the 1.45.0 release on 2026-11-02. Other versions: mark rows `verify against your SDK version`.
 
 Read `hub.md` first. This file adds what is specific to Vonage.
 
@@ -32,7 +32,7 @@ Vonage's unified and legacy web clients are **the same SDK under two names** (`@
 
 ## Mapping
 
-Stream equivalents are for `@stream-io/video-client` 1.63.0, `@stream-io/video-react-sdk` 1.44.1 and `@stream-io/node-sdk` 0.8.14.
+Stream equivalents are for `@stream-io/video-client` 1.64.0, `@stream-io/video-react-sdk` 1.45.0 and `@stream-io/node-sdk` 0.8.14.
 
 ### Server: sessions, tokens and identity
 
@@ -73,7 +73,7 @@ Stream equivalents are for `@stream-io/video-client` 1.63.0, `@stream-io/video-r
 | publisher `accessDialogOpened`, `accessAllowed`, `accessDenied` | `useCameraState()` / `useMicrophoneState()` `hasBrowserPermission`, `isPromptingPermission` | shape-shift | G10 |
 | `getStats()` / `getRtcStatsReport()` on publisher or subscriber | call stats (`useCallStatsReport()`) | shape-shift | |
 | `OT.initPublisher(..., { audioFilter: { type: 'advancedNoiseSuppression' } })`, `publisher.applyAudioFilter({ type: 'advancedNoiseSuppression' })` | `@stream-io/audio-filters-web` (`NoiseCancellation`) with `NoiseCancellationProvider` / `useNoiseCancellation()` (React) or `call.microphone.enableNoiseCancellation(...)` | shape-shift | Desktop browsers only. With no noise filter on a `meeting` or `calling` surface, offer Stream's noise cancellation as an `upgrade` (`hub.md` honesty rule 6) |
-| `OT.initPublisher(..., { echoCancellation, noiseSuppression, autoGainControl, disableAudioProcessing })` | none needed: Stream's microphone asks the browser for echo cancellation, noise suppression and gain control by default; `call.microphone.setDefaultConstraints(...)` overrides them | delete | Turning them off on purpose (music) is a product choice: keep it with `setDefaultConstraints` |
+| `OT.initPublisher(..., { echoCancellation, noiseSuppression, autoGainControl, disableAudioProcessing })` | none needed: Stream's microphone asks the browser for echo cancellation, noise suppression and gain control by default (from 1.45.0 it turns the browser's noise suppression off while Stream's noise cancellation is registered, so the two are not stacked); `call.microphone.setDefaultConstraints(...)` overrides them | delete | Turning them off on purpose (music) is a product choice: keep it with `setDefaultConstraints` |
 | Publisher `mediaStopped`, `audioInputDeviceChanged`; Publisher `muteForced` | device `status` from `useMicrophoneState()` / `useCameraState()`: the SDK disables the device itself when its track ends, and reflects mutes | shape-shift | G13. Vonage fires `muteForced` on the muted client's Publisher for both `forceMuteStream` and `forceMuteAll`; the Session's `muteForced` (Events table) fires only for `forceMuteAll` |
 | `OT.checkSystemRequirements()`, `OT.checkScreenSharingCapability()` | supported-platform checks in the docs | delete | |
 | `session.getPublisherForStream()` / `getSubscribersForStream()` | not needed | delete | |
@@ -116,7 +116,7 @@ Stream equivalents are for `@stream-io/video-client` 1.63.0, `@stream-io/video-r
 
 | Vonage construct | Stream equivalent | Class | Notes |
 |---|---|---|---|
-| a second `OT.initPublisher(el, { videoSource: 'screen' })` + `session.publish(...)` | `call.screenShare.enable()` / `disable()` / `toggle()`; `enableScreenShareAudio()`; `setSettings({ maxFramerate, maxBitrate, contentHint })` | behavioral-diff | `streams-vs-participants` trap: the share is a track on the same participant; render it with `<ParticipantView participant={p} trackType="screenShareTrack" />` where `hasScreenShare(p)` |
+| a second `OT.initPublisher(el, { videoSource: 'screen' })` + `session.publish(...)` | `call.screenShare.enable()` / `disable()` / `toggle()`; `enableScreenShareAudio()`; `setSettings({ maxFramerate, maxBitrate, contentHint })` | behavioral-diff | `streams-vs-participants` trap: the share is a track on the same participant; render it with `<ParticipantView participant={p} trackType="screenShareTrack" />` where `hasScreenShare(p)`. From 1.45.0 `contentHint` sets what gives way under load: `motion` keeps the frame rate, `detail` and `text` keep the resolution; with no hint the share keeps its resolution |
 | `stream.videoType === 'screen'` checks to place screen tiles | `hasScreenShare(p)`; `useHasOngoingScreenShare()` | shape-shift | |
 
 ### Archiving, broadcast, composer, captions
