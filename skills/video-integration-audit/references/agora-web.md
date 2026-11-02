@@ -1,6 +1,6 @@
 # Agora on the web -> Stream Video
 
-**Pinned to:** Agora `agora-rtc-sdk-ng` 4.24.9, `agora-rtc-sdk` 3.6.11 (deprecated), `agora-rtc-react` 2.5.1, `agora-rtm-sdk` 2.3.0 (and 1.5.1 for RTM 1.x), `agora-token` 2.0.7, `agora-access-token` 2.0.4 (deprecated). Stream side: `@stream-io/video-react-sdk` 1.45.0, `@stream-io/video-client` 1.64.0, `@stream-io/node-sdk` 0.8.14. Agora names verified against the published package typings and `docs.agora.io` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28 and the 1.45.0 release on 2026-11-02. Other versions: mark rows `verify against your SDK version`.
+**Pinned to:** Agora `agora-rtc-sdk-ng` 4.24.9, `agora-rtc-sdk` 3.6.11 (deprecated), `agora-rtc-react` 2.5.1, `agora-rtm-sdk` 2.3.0 (and 1.5.1 for RTM 1.x), `agora-token` 2.0.7, `agora-access-token` 2.0.4 (deprecated). Stream side: `@stream-io/video-react-sdk` 1.45.1, `@stream-io/video-client` 1.64.1, `@stream-io/audio-filters-web` 0.11.1, `@stream-io/node-sdk` 0.8.14. Agora names verified against the published package typings and `docs.agora.io` on 2026-10-22; Stream names against Stream's public docs the same day, rechecked against the 1.44.1 release on 2026-10-28 and the 1.45.0 and 1.45.1 releases on 2026-11-02. Other versions: mark rows `verify against your SDK version`.
 
 Read `hub.md` first: the decision areas, the cross-vendor traps and the honesty rules live there. This file adds what is specific to Agora.
 
@@ -31,7 +31,7 @@ Agora is an engine plus imperative callbacks: the app creates local tracks, publ
 
 ## Mapping (4.x)
 
-Stream equivalents are for `@stream-io/video-client` 1.64.0 and `@stream-io/video-react-sdk` 1.45.0.
+Stream equivalents are for `@stream-io/video-client` 1.64.1 and `@stream-io/video-react-sdk` 1.45.1.
 
 ### Tokens and identity
 
@@ -114,7 +114,7 @@ Stream equivalents are for `@stream-io/video-client` 1.64.0 and `@stream-io/vide
 |---|---|---|---|
 | `client.setEncryptionConfig(mode, secret, salt)` (built-in media encryption, e.g. `aes-128-gcm2`) | Stream E2EE (see `hub.md` Stream facts) | flag | Blocker-class requirement: state what Stream documents and refer to sales |
 | `client.startProxyServer(3 \| 5)` (cloud proxy: mode 3 forces UDP, mode 5 forces TLS on 443, per Agora's typings) | the call goes: Stream relays over TURN on TLS port 443 by itself when UDP is blocked, and firewalls allow Stream by domain; no fixed IPs | delete, flag | Two rows: `delete` for the call, and a flag for the network requirement behind it (what the customer's firewalls allow, and whether a domain allowlist will do). Restricted-network rule in `hub.md` |
-| `agora-extension-ai-denoiser` (`AIDenoiserExtension` registered with `AgoraRTC.registerExtensions`) | `@stream-io/audio-filters-web` (`NoiseCancellation`) with `NoiseCancellationProvider` / `useNoiseCancellation()` (React) or `call.microphone.enableNoiseCancellation(...)` | shape-shift | Desktop browsers only; flag mobile-web use. With no denoiser on a `meeting` or `calling` surface, offer Stream's noise cancellation as an `upgrade` (`hub.md` honesty rule 6) |
+| `agora-extension-ai-denoiser` (`AIDenoiserExtension` registered with `AgoraRTC.registerExtensions`) | `@stream-io/audio-filters-web` (`NoiseCancellation`) with `NoiseCancellationProvider` / `useNoiseCancellation()` (React) or `call.microphone.enableNoiseCancellation(...)` | shape-shift | Desktop browsers only; flag mobile-web use. From audio-filters-web 0.11.1 Safari and other WebKit browsers only with `new NoiseCancellation({ withSafariSupport: true })`. With no denoiser on a `meeting` or `calling` surface, offer Stream's noise cancellation as an `upgrade` (`hub.md` honesty rule 6) |
 | `agora-extension-virtual-background` | `BackgroundFiltersProvider` / `useBackgroundFilters()` | shape-shift | Chrome, Firefox, Edge 124+; Safari opt-in; flag older or mobile browsers |
 | Agora Conversational AI Engine, or an AI agent joining a channel as a uid | Stream's agent path: Vision Agents, where an agent joins the call as a server-side participant | flag | Decision area `integrations`; a re-architecture, not a port |
 | Agora on-premises recording | none in Stream's docs | flag | Refer to sales |

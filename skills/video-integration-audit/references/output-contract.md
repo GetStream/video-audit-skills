@@ -128,7 +128,7 @@ One row per **integration site**: a place in the code that uses a vendor constru
 
 | ID | Location | Vendor construct | Decision area | Stream equivalent (SDK version) | Class | Notes |
 |---|---|---|---|---|---|---|
-| INV-01 | `web/src/room.js:40` | `client.on('user-published')` + `client.subscribe(user, mediaType)` | track-device-lifecycle | none needed: automatic subscription; render `call.state.participants$` (`@stream-io/video-client` 1.64.0) | delete | delete the subscribe loop |
+| INV-01 | `web/src/room.js:40` | `client.on('user-published')` + `client.subscribe(user, mediaType)` | track-device-lifecycle | none needed: automatic subscription; render `call.state.participants$` (`@stream-io/video-client` 1.64.1) | delete | delete the subscribe loop |
 
 `Class` is one of:
 
@@ -214,7 +214,7 @@ The last section of the report is one fenced `json` block holding the same rows 
 ```json
 {
   "schema": "video-integration-audit/v1",
-  "skill_version": "0.2.1",
+  "skill_version": "0.2.2",
   "date": "YYYY-MM-DD",
   "mode": "migration",
   "detected": [
@@ -253,7 +253,7 @@ The last section of the report is one fenced `json` block holding the same rows 
       "construct": "client.on('user-published') + client.subscribe(user, mediaType)",
       "decision_area": "track-device-lifecycle",
       "stream_equivalent": "automatic subscription; render call.state.participants$",
-      "stream_sdk": "@stream-io/video-client@1.64.0",
+      "stream_sdk": "@stream-io/video-client@1.64.1",
       "class": "delete",
       "verify": false,
       "surface": "S1",

@@ -2,6 +2,19 @@
 
 Entries are per skill, newest first. Each skill is versioned on its own; see "Versions" in [`README.md`](README.md).
 
+## stream-video-webview-audit 0.7 (2026-11-02)
+
+Checked against `@stream-io/video-react-sdk` 1.45.1 (`@stream-io/video-client` 1.64.1).
+
+- A9: from 1.45.1 the SDK asks the browser again when the user turns the microphone or camera on after a denial, so a deny-first host costs the user a second tap and a muted start instead of a dead microphone. Severity is High below 1.45.1 and Medium from it.
+- B7 now asks for 1.45.1 or later.
+
+## video-integration-audit 0.2.2 (2026-11-02)
+
+- Pinned to `@stream-io/video-react-sdk` 1.45.1 (`@stream-io/video-client` 1.64.1, `@stream-io/audio-filters-web` 0.11.1).
+- Noise-cancellation rows: from audio-filters-web 0.11.1, Safari and other WebKit browsers report noise cancellation unsupported unless the app passes `withSafariSupport: true`.
+- G10: `isBrowserPermissionBlocked` (1.45.1) separates a browser block from a denial the SDK retries.
+
 ## stream-video-webview-audit 0.6 (2026-11-02)
 
 Checked against `@stream-io/video-react-sdk` 1.45.0 (`@stream-io/video-client` 1.64.0). What 1.45.0 changes comes from its source and release notes; the device runs behind the observations were not repeated on it.

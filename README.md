@@ -27,7 +27,7 @@ Each `SKILL.md` declares its `allowed-tools` for Claude Code. Not every agent ho
 
 Checks the host app's lifecycle handling, audio session and WebView configuration, and the web page's handling of the call, against the failure modes that make a call inside a WebView drop when the phone locks, go silent after the user returns, rejoin by itself or lose the microphone. Each finding names the file and line, says what the user experiences and gives the fix, with Kotlin and Swift snippets in the skill's `references/` folder.
 
-The checklist has two parts. Section A holds for any WebRTC SDK running inside a WebView. Section B is specific to Stream's React video SDK and was checked against `@stream-io/video-react-sdk` 1.45.0; it names no unreleased SDK features. The checks come from reproductions on Android 14 to 16 emulators and on one iPhone running iOS 26, not from your app, and [`SKILL.md`](skills/stream-video-webview-audit/SKILL.md) lists what was not tested and what the audit does not cover.
+The checklist has two parts. Section A holds for any WebRTC SDK running inside a WebView. Section B is specific to Stream's React video SDK and was checked against `@stream-io/video-react-sdk` 1.45.1; it names no unreleased SDK features. The checks come from reproductions on Android 14 to 16 emulators and on one iPhone running iOS 26, not from your app, and [`SKILL.md`](skills/stream-video-webview-audit/SKILL.md) lists what was not tested and what the audit does not cover.
 
 Ask your agent, in the repository you want audited:
 

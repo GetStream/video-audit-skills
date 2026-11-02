@@ -5,7 +5,7 @@ license: Apache-2.0
 compatibility: Any coding agent that can read, list and search files and write one file. No CLI, no network access, no packages, no other skills.
 metadata:
   author: GetStream
-  version: "0.2.1"
+  version: "0.2.2"
 allowed-tools: Read, Glob, Grep, Write
 ---
 

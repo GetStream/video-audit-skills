@@ -113,7 +113,7 @@ window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 ```
 
-(In React SDK 1.44.1 and 1.45.0 only the prebuilt embedded call and livestream components (`@stream-io/video-react-sdk/embedded`) request a Screen Wake Lock while joined, and a request can be refused; a page built from the other components or the client does not. The page can request one itself: `navigator.wakeLock.request('screen')` resolves in WebView 124 and 133. The host flag is the reliable answer.)
+(In React SDK 1.44.1 to 1.45.1 only the prebuilt embedded call and livestream components (`@stream-io/video-react-sdk/embedded`) request a Screen Wake Lock while joined, and a request can be refused; a page built from the other components or the client does not. The page can request one itself: `navigator.wakeLock.request('screen')` resolves in WebView 124 and 133. The host flag is the reliable answer.)
 
 ## 3. Never reload or recreate the call page as a side effect
 
@@ -199,7 +199,7 @@ override fun onNewIntent(intent: Intent) {
 
 ## 7. Microphone permission: ask natively first, then grant only what was asked
 
-**What we observed.** If the page's microphone request was denied once (for example while the app was still showing Android's own permission dialog), Stream's SDK, on every version we tested up to and including 1.44.1, did not ask again in that page, and unmute did nothing until a reload. The 1.45.0 source behaves the same way. The host side:
+**What we observed.** If the page's microphone request was denied once (for example while the app was still showing Android's own permission dialog), Stream's SDK, on every version we tested up to and including 1.44.1, did not ask again in that page, and unmute did nothing until a reload. 1.45.0 behaves the same way. From 1.45.1 the SDK asks the browser again the next time the user turns the microphone on (per its release notes, tested by Stream in Android WebView 145; not in our host), but never without a user action, so a page that turns the microphone on by default still starts the call muted after a denial. The host side:
 
 ```kotlin
 // WebView settings for a call page

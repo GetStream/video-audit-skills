@@ -143,7 +143,7 @@ Run every check in every mode. In the "neither" mode (no supported video SDK fou
 |---|---|
 | Agora | `PERMISSION_DENIED`, `NOT_READABLE`, `DEVICE_NOT_FOUND` error codes from track creation |
 | Vonage | publisher `accessDialogOpened`, `accessDialogClosed`, `accessAllowed`, `accessDenied` events |
-| Stream | `useCameraState().hasBrowserPermission`, `isPromptingPermission` (React) |
+| Stream | `useCameraState().hasBrowserPermission`, `isPromptingPermission` (React); from React SDK 1.45.1, `isBrowserPermissionBlocked` separates a browser block (only the user's browser or system settings can lift it) from a denial that turning the device on again retries |
 
 ### G11. Cost-driving media settings are explicit - Low
 
